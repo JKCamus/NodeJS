@@ -1,10 +1,11 @@
+const fs = require("fs");
+const path = require("path");
 /**
  * @description: path
  * @param {*}
  * @return {*}
  * @author: camus
  */
-// const path = require("path");
 // const basePath1 = "User/camus";
 // const basePath = "/User/camus";
 // const fileName = "abc.text";
@@ -20,14 +21,36 @@
  * @return {*}
  * @author: camus
  */
-const fs = require("fs");
-// const content='你好，李银河'
-// fs.writeFile('./abc.txt',content,err=>{
-//   console.log(err);
-// })
+// // const content='你好，李银河'
+// // fs.writeFile('./abc.txt',content,err=>{
+// //   console.log(err);
+// // })
+// /* 新建文件夹 */
 const dirname = "./camus";
-if (!fs.existsSync(dirname)) {
-  fs.mkdir(dirname, err => {
-    console.log(err);
+// if (!fs.existsSync(dirname)) {
+//   fs.mkdir(dirname, err => {
+//     console.log(err);
+//   });
+// }
+/**
+ * @description: 递归读取文件夹的所有文件
+ * @param {*}
+ * @return {*}
+ * @author: camus
+ */
+function getFiles(dirname) {
+  fs.readdir(dirname, { withFileTypes: true }, (err, files) => {
+    for (let file of files) {
+      //   fs.stat(file)可以，但是很麻烦
+    //   console.log("file", file);
+      /* 判断是否是文件夹 */
+      if (file.isDirectory()) {
+        const filePath = path.resolve(dirname, file.name);
+        getFiles(filePath);
+      } else {
+        console.log(file.name);
+      }
+    }
   });
 }
+getFiles(dirname);
