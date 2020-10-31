@@ -40,6 +40,7 @@ const createDirSync = (pathName) => {
   } else {
     /* dirname直接拿到父级文件路径 */
     if (createDirSync(path.dirname(pathName))) {
+      // 存在父亲文件，就直接新建该文件
       fs.mkdirSync(pathName);
       return true;
     }
@@ -54,6 +55,10 @@ const createDirSync = (pathName) => {
  * @author: camus
  */
 const writeToFile = (path, content) => {
+  if (fs.existsSync(path)) {
+    log.error("the file already exists~");
+    return;
+  }
   return fs.promises.writeFile(path, content);
 };
 

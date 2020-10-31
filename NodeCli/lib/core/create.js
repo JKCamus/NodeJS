@@ -1,5 +1,9 @@
 const program = require("commander");
-const { createProjectAction,addComponentAction} = require("./actions");
+const {
+  createProjectAction,
+  addComponentAction,
+  addPageAndRouteAction,
+} = require("./actions");
 
 const createCommands = () => {
   /* [other...]表示执行create demo 后面还可以再跟别的参数 */
@@ -16,7 +20,16 @@ const createCommands = () => {
     )
     /* program.dest里含有地址信息，不传递地址，为 */
     .action((name) => {
-      addComponentAction(name, program.dest || 'src/components');
+      addComponentAction(name, program.dest || "src/components");
+    });
+
+  program
+    .command("addpage <page>")
+    .description(
+      "add vue page and router config,eg: camus addpage Home [-d src/pages]"
+    )
+    .action((page) => {
+      addPageAndRouteAction(page, program.dest || "src/pages");
     });
 };
 
