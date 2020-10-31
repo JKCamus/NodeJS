@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const ejs = require("ejs");
+const log = require("./log");
 
 /**
  * @description: 编译模板方法，用于编译写好的vue，js等模板
@@ -18,7 +19,8 @@ const compile = (templateName, data) => {
     /* {data}因为在模板中我们给的是data.lowerName，所以这边是直接传data */
     ejs.renderFile(templatePath, { data }, {}, (err, res) => {
       if (err) {
-        console.log("打印错误", err);
+        // console.log("打印错误", err);
+        log.error(err);
         reject(err);
         return;
       }
