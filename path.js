@@ -38,19 +38,25 @@ const dirname = "./camus";
  * @return {*}
  * @author: camus
  */
-function getFiles(dirname) {
-  fs.readdir(dirname, { withFileTypes: true }, (err, files) => {
-    for (let file of files) {
-      //   fs.stat(file)可以，但是很麻烦
-    //   console.log("file", file);
-      /* 判断是否是文件夹 */
-      if (file.isDirectory()) {
-        const filePath = path.resolve(dirname, file.name);
-        getFiles(filePath);
-      } else {
-        console.log(file.name);
-      }
-    }
-  });
-}
-getFiles(dirname);
+// function getFiles(dirname) {
+//   fs.readdir(dirname, { withFileTypes: true }, (err, files) => {
+//     for (let file of files) {
+//       //   fs.stat(file)可以，但是很麻烦
+//     //   console.log("file", file);
+//       /* 判断是否是文件夹 */
+//       if (file.isDirectory()) {
+//         const filePath = path.resolve(dirname, file.name);
+//         getFiles(filePath);
+//       } else {
+//         console.log(file.name);
+//       }
+//     }
+//   });
+// }
+// getFiles(dirname);
+/**
+ * @description: 
+ * @param {*}
+ * @return {*}
+ * @author: camus
+ */
