@@ -1,7 +1,6 @@
 const { promisify } = require("util");
 const path = require("path");
-const log = require('../utils/log');
-
+const log = require("../utils/log");
 
 /**
  * @description: 通过promisify包装的down-git-repo的callback形式转换为
@@ -86,8 +85,17 @@ const addPageAndRouteAction = async (name, dest) => {
   }
 };
 
+const addStoreAction = async (name, dest) => {
+  const targetDest = path.resolve(dest, name.toLowerCase());
+  if (createDirSync(targetDest)) {
+    handleEjsToFile(name, targetDest, "vue-store.ejs", "index.js");
+    handleEjsToFile(name, targetDest, "vue-types.ejs", "types.js");
+  }
+};
+
 module.exports = {
   createProjectAction,
   addComponentAction,
   addPageAndRouteAction,
+  addStoreAction,
 };

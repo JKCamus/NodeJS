@@ -3,6 +3,7 @@ const {
   createProjectAction,
   addComponentAction,
   addPageAndRouteAction,
+  addStoreAction,
 } = require("./actions");
 
 const createCommands = () => {
@@ -26,10 +27,16 @@ const createCommands = () => {
   program
     .command("addpage <page>")
     .description(
-      "add vue page and router config,eg: camus addpage Home [-d src/pages]"
+      "add vue page && router config,eg: camus addpage Home [-d src/pages]"
     )
     .action((page) => {
       addPageAndRouteAction(page, program.dest || "src/pages");
+    });
+  program
+    .command("addstore <name>")
+    .description("add vue store,eg: camus addstore favor [-d dest]")
+    .action((store) => {
+      addStoreAction(store, program.dest || "src/store/modules");
     });
 };
 
