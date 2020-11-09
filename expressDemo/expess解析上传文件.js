@@ -25,6 +25,8 @@ const upload = multer(
   }
 );
 /* 放入了一个中间件upload.any */
+/* any时0
+不要讲multer作为全局中间件 */
 app.post("/login", upload.any(), (req, res, next) => {
   console.log(req.body); //[Object: null prototype] { name: 'camus', age: '26' }
   res.end("登录成功~");
@@ -35,6 +37,7 @@ app.post("/login", upload.any(), (req, res, next) => {
  * 多图上传时为array但图为single
  * @param {*}
  */
+
 // app.post("/upload", upload.array("file"), (req, res, next) => {
 //   /* 单文件为file，多文件为files */
 //   console.log(req.files);
