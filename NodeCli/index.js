@@ -9,7 +9,7 @@ program.version(require("./package.json").version);
 const helpOptions = require("./lib/core/help");
 const createCommands = require("./lib/core/create");
 /* 满足-V和-v都可以使用 */
-program.version(require("./package.json").version);
+// program.version(require("./package.json").version);
 program.version(require("./package.json").version, "-v, --version");
 helpOptions();
 createCommands();
