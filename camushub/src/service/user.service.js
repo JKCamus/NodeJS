@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-24 21:24:17
  * @LastEditors: camus
- * @LastEditTime: 2020-11-25 09:37:13
+ * @LastEditTime: 2020-11-26 09:28:02
  */
 
 const connection = require("../app/database");
@@ -17,6 +17,13 @@ class UserService {
     const statement = `INSERT INTO user (name, password) VALUES (?, ?);`;
     /* 执行相关的mysql语句，数组中，name，password按顺序填入 */
     const result = await connection.execute(statement, [name, password]);
+    // 第一个为返回的结果
+    return result[0];
+  }
+
+  async getUserByName(name) {
+    const statement = `SELECT * FROM user WHERE name = ?;`;
+    const result = await connection.execute(statement, [name]);
     return result[0];
   }
 }

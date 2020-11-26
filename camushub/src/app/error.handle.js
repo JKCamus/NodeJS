@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-25 09:59:15
  * @LastEditors: camus
- * @LastEditTime: 2020-11-25 10:48:00
+ * @LastEditTime: 2020-11-26 09:30:18
  */
 const errorTypes = require("../constants/error-types");
 /**
@@ -22,7 +22,10 @@ const errorHandler = (error, ctx) => {
       status = 400;
       message = "用户或者密码不能为空";
       break;
-
+    case errorTypes.USER_ALREADY_EXISTS:
+      status = 409; //conflict
+      message = "已存在当前用户名";
+      break;
     default:
       status = 404;
       message = "NOT FOUND";
