@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-25 09:59:15
  * @LastEditors: camus
- * @LastEditTime: 2020-11-26 09:30:18
+ * @LastEditTime: 2020-11-26 11:18:53
  */
 const errorTypes = require("../constants/error-types");
 /**
@@ -25,6 +25,10 @@ const errorHandler = (error, ctx) => {
     case errorTypes.USER_ALREADY_EXISTS:
       status = 409; //conflict
       message = "已存在当前用户名";
+      break;
+    case errorTypes.USER_DOES_NOT_EXISTS:
+      status = 400; 
+      message = "当前用户不存在";
       break;
     default:
       status = 404;
