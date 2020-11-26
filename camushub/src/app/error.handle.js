@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-25 09:59:15
  * @LastEditors: camus
- * @LastEditTime: 2020-11-26 11:18:53
+ * @LastEditTime: 2020-11-26 15:46:16
  */
 const errorTypes = require("../constants/error-types");
 /**
@@ -27,8 +27,12 @@ const errorHandler = (error, ctx) => {
       message = "已存在当前用户名";
       break;
     case errorTypes.USER_DOES_NOT_EXISTS:
-      status = 400; 
+      status = 400;
       message = "当前用户不存在";
+      break;
+    case errorTypes.PASSWORD_IS_INCORRECT:
+      status = 400;
+      message = "密码不正确";
       break;
     default:
       status = 404;
