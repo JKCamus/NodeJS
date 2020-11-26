@@ -4,10 +4,11 @@
  * @Author: camus
  * @Date: 2020-11-25 09:45:51
  * @LastEditors: camus
- * @LastEditTime: 2020-11-26 09:30:40
+ * @LastEditTime: 2020-11-26 10:23:13
  */
 const errorTypes = require("../constants/error-types");
 const service = require("../service/user.service");
+const md5password = require("../utils/password-handle");
 /**
  * @description: 验证中间件
  * @param {*} ctx
@@ -35,7 +36,20 @@ const verifyUser = async (ctx, next) => {
   // 异步操作，所以要拿到后面异步请求的结果，需要await
   await next();
 };
+/**
+ * @description: 密码加密中间件，采用md5加密
+ * @param {*} ctx
+ * @param {*} next
+ * @return {*}
+ * @author: camus
+ */
+const handlePassword = async (ctx, next) => {
+  const { password } = ctx.request.body;
+  ctx.request.body.password = md5password(password);
+  await next();
+};
 
 module.exports = {
   verifyUser,
+  handlePassword,
 };

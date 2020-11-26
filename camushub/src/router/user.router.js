@@ -5,13 +5,13 @@
  * @Author: camus
  * @Date: 2020-11-24 19:59:38
  * @LastEditors: camus
- * @LastEditTime: 2020-11-25 09:50:19
+ * @LastEditTime: 2020-11-26 10:13:08
  */
 const Router = require("koa-router");
 const { create } = require("../controller/user.controller");
 const userRouter = new Router({ prefix: "/users" });
 
-const { verifyUser } = require("../middleware/user.middleware");
+const { verifyUser,handlePassword } = require("../middleware/user.middleware");
 
 // userRouter.post("/", (ctx, next) => {
 //   ctx.body = "创建用户成功";
@@ -23,6 +23,6 @@ const { verifyUser } = require("../middleware/user.middleware");
  * @return {*}
  * @author: camus
  */
-userRouter.post("/", verifyUser, create);
+userRouter.post("/", verifyUser,handlePassword, create);
 
 module.exports = userRouter;
