@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-26 11:04:11
  * @LastEditors: camus
- * @LastEditTime: 2020-11-27 15:10:03
+ * @LastEditTime: 2020-11-27 16:55:26
  */
 const { PUBLIC_KEY } = require("../app/config");
 const jwt = require("jsonwebtoken");
@@ -42,7 +42,7 @@ const verifyLogin = async (ctx, next) => {
 };
 
 const verifyAuth = async (ctx, next) => {
-  console.log("验证未授权的middleware");
+  console.log("验证授权的middleware");
   // 1. 获取token
   const authorization = ctx.header.authorization;
   if (!authorization) {
