@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-25 09:59:15
  * @LastEditors: camus
- * @LastEditTime: 2020-11-26 15:46:16
+ * @LastEditTime: 2020-11-27 15:09:40
  */
 const errorTypes = require("../constants/error-types");
 /**
@@ -33,6 +33,10 @@ const errorHandler = (error, ctx) => {
     case errorTypes.PASSWORD_IS_INCORRECT:
       status = 400;
       message = "密码不正确";
+      break;
+    case errorTypes.UNAUTHORIZED:
+      status = 401;
+      message = "无效token";
       break;
     default:
       status = 404;

@@ -4,8 +4,10 @@
  * @Author: camus
  * @Date: 2020-11-26 11:04:11
  * @LastEditors: camus
- * @LastEditTime: 2020-11-26 15:45:50
+ * @LastEditTime: 2020-11-27 15:10:03
  */
+const { PUBLIC_KEY } = require("../app/config");
+const jwt = require("jsonwebtoken");
 const errorTypes = require("../constants/error-types");
 const service = require("../service/user.service");
 const md5password = require("../utils/password-handle");
@@ -35,9 +37,32 @@ const verifyLogin = async (ctx, next) => {
     const error = new Error(errorTypes.PASSWORD_IS_INCORRECT);
     return ctx.app.emit("error", error, ctx);
   }
-
+  ctx.user = user;
   await next();
 };
+
+const verifyAuth = async (ctx, next) => {
+  console.log("验证未授权的middleware");
+  // 1. 获取token
+  const authorization = ctx.header.authorization;
+  if (!authorization) {
+    const error = new Error(errorTypes.UNAUTHORIZED);
+    return ctx.app.emit("error", error, ctx);
+  }
+  const token = authorization.replace("Bearer ", "");
+  try {
+    const result = jwt.verify(token, PUBLIC_KEY, {
+      algorithms: ["RS256"],
+    });
+    ctx.user = result;
+    await next();
+  } catch (err) {
+    const error = new Error(errorTypes.UNAUTHORIZED);
+    ctx.app.emit("error", error, ctx);
+  }
+};
+
 module.exports = {
   verifyLogin,
+  verifyAuth,
 };
