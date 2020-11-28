@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-25 09:59:15
  * @LastEditors: camus
- * @LastEditTime: 2020-11-27 15:09:40
+ * @LastEditTime: 2020-11-28 21:05:53
  */
 const errorTypes = require("../constants/error-types");
 /**
@@ -37,6 +37,14 @@ const errorHandler = (error, ctx) => {
     case errorTypes.UNAUTHORIZED:
       status = 401;
       message = "无效token";
+      break;
+    case errorTypes.NOT_LOGGED:
+      status = 401;
+      message = "当前用户未登录";
+      break;
+    case errorTypes.UN_PERMISSION:
+      status = 401;
+      message = "无权限";
       break;
     default:
       status = 404;
