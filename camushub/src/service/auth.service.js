@@ -1,10 +1,10 @@
 /*
- * @Description:
+ * @Description:单独鉴权模块，方便之后直接调取鉴权
  * @version:
  * @Author: camus
  * @Date: 2020-11-28 20:17:23
  * @LastEditors: camus
- * @LastEditTime: 2020-11-28 20:23:30
+ * @LastEditTime: 2020-11-28 21:10:02
  */
 const connection = require("../app/database");
 

@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-26 11:04:11
  * @LastEditors: camus
- * @LastEditTime: 2020-11-28 21:07:34
+ * @LastEditTime: 2020-11-28 21:10:45
  */
 const { PUBLIC_KEY } = require("../app/config");
 const jwt = require("jsonwebtoken");
@@ -56,7 +56,7 @@ const verifyAuth = async (ctx, next) => {
     const error = new Error(errorTypes.NOT_LOGGED);
     return ctx.app.emit("error", error, ctx);
   }
-  
+
   const token = authorization.replace("Bearer ", "");
   try {
     const result = jwt.verify(token, PUBLIC_KEY, {
@@ -80,10 +80,10 @@ const verifyPermission = async (ctx, next) => {
   // 获取参数{commentId:'10'}
   const [resourceKey] = Object.keys(ctx.params);
   // 规范命名后，可以获取表名。表名+Id就是这个信息的id
-  
+
   const tableName = resourceKey.replace("Id", "");
   const resourceId = ctx.params[resourceKey];
-  
+
   const { id } = ctx.user;
   try {
     const IsPermission = await authService.checkResource(
@@ -91,6 +91,7 @@ const verifyPermission = async (ctx, next) => {
       resourceId,
       id
     );
+    // 避免代码冗余，直接抛出异常，会进入catch
     if (!IsPermission) throw new Error();
     await next();
   } catch (error) {

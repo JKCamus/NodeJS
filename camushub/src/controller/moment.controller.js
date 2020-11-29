@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-27 16:35:38
  * @LastEditors: camus
- * @LastEditTime: 2020-11-28 20:40:56
+ * @LastEditTime: 2020-11-29 13:55:40
  */
 const momentService = require("../service/moment.service");
 class MomentController {
@@ -34,6 +34,15 @@ class MomentController {
       ctx.body = result;
     } catch (error) {
       console.log(error);
+    }
+  }
+  async remove(ctx, next) {
+    try {
+      const { momentId } = ctx.params;
+      const result = await momentService.remove(momentId);
+      ctx.body = result;
+    } catch (error) {
+      console.log("", error);
     }
   }
 }

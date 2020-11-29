@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-27 16:47:23
  * @LastEditors: camus
- * @LastEditTime: 2020-11-28 20:39:37
+ * @LastEditTime: 2020-11-29 14:02:30
  */
 const connection = require("../app/database");
 const sqlFragment = `
@@ -40,6 +40,16 @@ class MomentService {
     try {
       const statement = `UPDATE moment SET content = ? WHERE id = ?;`;
       const [result] = await connection.execute(statement, [content, momentId]);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async remove(momentId) {
+    try {
+      const statement = `DELETE FROM moment WHERE id = ?`;
+      const [result] = await connection.execute(statement, [momentId]);
       return result;
     } catch (error) {
       console.log(error);
