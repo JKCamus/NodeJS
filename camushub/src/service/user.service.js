@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-24 21:24:17
  * @LastEditors: camus
- * @LastEditTime: 2020-11-26 09:28:02
+ * @LastEditTime: 2020-12-03 20:39:36
  */
 
 const connection = require("../app/database");
@@ -25,6 +25,15 @@ class UserService {
     const statement = `SELECT * FROM user WHERE name = ?;`;
     const result = await connection.execute(statement, [name]);
     return result[0];
+  }
+  async updateAvatarUrlById(avatarUrl, userId) {
+    try {
+      const statement = `UPDATE user SET avatar_url = ? WHERE id = ?;`;
+      const [result] = await connection.execute(statement, [avatarUrl, userId]);
+      return result;
+    } catch (error) {
+      console.log("UserService.updateAvatarUrlById", error);
+    }
   }
 }
 module.exports = new UserService();
