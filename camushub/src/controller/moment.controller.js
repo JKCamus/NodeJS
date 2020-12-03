@@ -45,5 +45,19 @@ class MomentController {
       console.log("", error);
     }
   }
+  async addLabels(ctx,next){
+    try {
+      const {labels}=ctx
+      const  {momentId}=ctx.params
+      for(let label of labels){
+        const isExist=await momentService.hasLabel(momentId,label.id)
+        if(!isExist){
+          await momentService.addLabels(momentId,label.id)
+        }
+      }
+    } catch (error) {
+      console.log('MomentController.addLabels',error )
+    }
+  }
 }
 module.exports = new MomentController();

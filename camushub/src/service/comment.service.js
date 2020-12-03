@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-29 14:15:01
  * @LastEditors: camus
- * @LastEditTime: 2020-11-29 15:33:25
+ * @LastEditTime: 2020-12-02 10:19:13
  */
 const connection = require("../app/database");
 
@@ -57,6 +57,23 @@ class CommentService {
       return result;
     } catch (error) {
       console.log("CommentService.remove", error);
+    }
+  }
+
+  async getCommentsByMomentId(commentId) {
+    try {
+      const statement = `
+      SELECT
+        m.id, m.content, m.comment_id commendId, m.createAt createTime,
+        JSON_OBJECT('id', u.id, 'name', u.name) user
+      FROM comment m
+      LEFT JOIN user u ON u.id = m.user_id
+      WHERE moment_id = ?;
+    `;
+      const [result] = await connection.execute(statement, [commentId]);
+      return result;
+    } catch (error) {
+      console.log("CommentService.getCommentsByMomentId", error);
     }
   }
 }

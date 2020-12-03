@@ -4,11 +4,11 @@
  * @Author: camus
  * @Date: 2020-11-27 16:47:23
  * @LastEditors: camus
- * @LastEditTime: 2020-11-29 14:02:30
+ * @LastEditTime: 2020-12-02 14:38:06
  */
 const connection = require("../app/database");
 const sqlFragment = `
-    SELECT 
+    SELECT
     m.id id, m.content content, m.createAt createTime, m.updateAt updateTime,
     JSON_OBJECT('id', u.id, 'name', u.name) author
     FROM moment m
@@ -21,15 +21,15 @@ class MomentService {
     return result;
   }
   async getMomentById(momentId) {
-    const statement = ` 
-    ${sqlFragment} 
+    const statement = `
+    ${sqlFragment}
     WHERE m.id = ?;`;
     const [result] = await connection.execute(statement, [momentId]);
     return result[0];
   }
   async getMomentList(page, size) {
-    const statement = ` 
-    ${sqlFragment} 
+    const statement = `
+    ${sqlFragment}
     LIMIT ?,?;
     `;
     const [result] = await connection.execute(statement, [page, size]);
@@ -53,6 +53,25 @@ class MomentService {
       return result;
     } catch (error) {
       console.log(error);
+    }
+  }
+  async hasLabel(momentId, labelId) {
+    try {
+      const statement = `SELECT * FROM moment_label WHERE moment_id = ? AND label_id = ?`;
+      const [result] = await connection.execute(statement, [momentId, labelId]);
+      return result[0] ? true : false;
+    } catch (error) {
+      console.log("MomentService.hasLabel", error);
+    }
+  }
+
+  async addLabel(momentId, labelId) {
+    try {
+      const statement = `INSERT INTO moment_label (moment_id, label_id) VALUES (?, ?);`;
+      const [result] = await connection.execute(statement, [momentId, labelId]);
+      return result;
+    } catch (error) {
+      console.log("MomentService.addLabel", error);
     }
   }
 }

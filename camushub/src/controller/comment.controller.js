@@ -6,7 +6,7 @@ const commentService = require("../service/comment.service");
  * @Author: camus
  * @Date: 2020-11-29 14:04:56
  * @LastEditors: camus
- * @LastEditTime: 2020-11-29 15:26:06
+ * @LastEditTime: 2020-12-02 10:29:49
  */
 const CommentService = require("../service/comment.service");
 class CommentController {
@@ -46,13 +46,24 @@ class CommentController {
       console.log(error);
     }
   }
-  async remove(ctx,next){
+  async remove(ctx, next) {
     try {
-      const {commentId}=ctx.params
-      const result=await CommentService.remove(commentId)
-      ctx.body=result
+      const { commentId } = ctx.params;
+      const result = await CommentService.remove(commentId);
+      ctx.body = result;
     } catch (error) {
-      console.log('CommentController.remove',error )
+      console.log("CommentController.remove", error);
+    }
+  }
+
+  async getList(ctx, next) {
+    try {
+      const { commentId } = ctx.query;
+      if (!commentId) throw new Error();
+      const result = await CommentService.getCommentsByMomentId(commentId);
+      ctx.body = result;
+    } catch (error) {
+      console.log("CommentController.getList", error);
     }
   }
 }
