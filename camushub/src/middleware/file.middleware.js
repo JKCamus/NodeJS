@@ -4,13 +4,17 @@
  * @Author: camus
  * @Date: 2020-12-03 20:15:39
  * @LastEditors: camus
- * @LastEditTime: 2020-12-03 23:27:57
+ * @LastEditTime: 2020-12-07 23:25:21
  */
 const path = require("path");
 const Multer = require("koa-multer");
 
 const Jimp = require("jimp");
-const { AVATAR_PATH, PICTURE_PATH } = require("../constants/file.path");
+const {
+  AVATAR_PATH,
+  PICTURE_PATH,
+  PHOTO_PATH,
+} = require("../constants/file.path");
 // 头像上传地址
 const avatarUpload = Multer({
   dest: AVATAR_PATH,
@@ -30,7 +34,7 @@ const pictureResize = async (ctx, next) => {
     for (let file of files) {
       console.log("file", file);
       const destPath = path.join(file.destination, file.filename);
-      console.log("destPath", destPath);
+      // console.log("destPath", destPath);
       Jimp.read(file.path).then((image) => {
         image.resize(1280, Jimp.AUTO).write(`${destPath}-large`);
         image.resize(640, Jimp.AUTO).write(`${destPath}-middle`);
@@ -43,8 +47,34 @@ const pictureResize = async (ctx, next) => {
   }
 };
 
+const photoUpload = Multer({
+  dest: PHOTO_PATH,
+});
+const photoHandler = photoUpload.array("photo", 9);
+
+const photoResize = async (ctx, next) => {
+  try {
+    // 获取所有的图片信息
+    const files = ctx.req.files;
+    // 对图像进行处理（sharp,jimp）
+    for (let file of files) {
+      const destPath = path.join(file.destination, file.filename);
+      // console.log("destPath", destPath);
+      Jimp.read(file.path).then((image) => {
+        image.resize(1280, Jimp.AUTO).write(`${destPath}-large`);
+        image.resize(640, Jimp.AUTO).write(`${destPath}-middle`);
+        image.resize(320, Jimp.AUTO).write(`${destPath}-small`);
+      });
+    }
+    await next();
+  } catch (error) {
+    console.log("photoResize", error);
+  }
+};
 module.exports = {
   avatarHandler,
   pictureResize,
   pictureHandler,
+  photoHandler,
+  photoResize
 };

@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:26:23
  * @LastEditors: camus
- * @LastEditTime: 2020-12-03 23:14:00
+ * @LastEditTime: 2020-12-07 23:08:20
  */
 const { APP_HOST, APP_PORT } = require("../app/config");
 const fileService = require("../service/file.service");
@@ -39,6 +39,21 @@ class FileController {
       for (let file of files) {
         const { filename, mimetype, size } = file;
         await fileService.createFile(filename, mimetype, size, id, momentId);
+      }
+      ctx.body = "动态配图上传完成~";
+    } catch (error) {
+      console.log("FileController.savePictureInfo", error);
+    }
+  }
+  async savePhotoInfo(ctx, next) {
+    try {
+      // 获取图像信息
+      const files = ctx.req.files;
+      const {content,title}=ctx.req.body
+      // 将所有的文件信息保存到数据集中
+      for (let file of files) {
+        const { filename, mimetype, size } = file;
+        await fileService.createPhoto(filename, mimetype, size,title,content);
       }
       ctx.body = "动态配图上传完成~";
     } catch (error) {
