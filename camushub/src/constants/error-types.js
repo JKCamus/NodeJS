@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-25 10:10:25
  * @LastEditors: camus
- * @LastEditTime: 2020-11-28 21:05:28
+ * @LastEditTime: 2021-01-06 21:58:18
  */
 const NAME_OR_PASSWORD_IS_REQUIRED = "name_or_password_is_required";
 const USER_ALREADY_EXISTS = "user_already_exists";
@@ -14,6 +14,10 @@ const UNAUTHORIZED = "unauthorized";
 const NOT_LOGGED = "notLogged";
 const UN_PERMISSION = "unPermission";
 
+/* photos */
+const INVALID_PICTURE = "InvalidPicture";
+
+
 module.exports = {
   NAME_OR_PASSWORD_IS_REQUIRED,
   USER_ALREADY_EXISTS,
@@ -22,4 +26,5 @@ module.exports = {
   UNAUTHORIZED,
   NOT_LOGGED,
   UN_PERMISSION,
+  INVALID_PICTURE
 };

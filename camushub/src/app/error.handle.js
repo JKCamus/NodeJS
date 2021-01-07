@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-25 09:59:15
  * @LastEditors: camus
- * @LastEditTime: 2020-11-28 21:05:53
+ * @LastEditTime: 2021-01-06 22:01:37
  */
 const errorTypes = require("../constants/error-types");
 /**
@@ -18,6 +18,11 @@ const errorHandler = (error, ctx) => {
   let status, message;
   /* 注意是error.message一个参数 */
   switch (error.message) {
+    /* photo */
+    case errorTypes.INVALID_PICTURE:
+      status = 400;
+      message = "无效图片";
+      break;
     case errorTypes.NAME_OR_PASSWORD_IS_REQUIRED:
       status = 400;
       message = "用户或者密码不能为空";

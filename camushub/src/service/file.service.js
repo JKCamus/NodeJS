@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:32:12
  * @LastEditors: camus
- * @LastEditTime: 2020-12-08 13:38:03
+ * @LastEditTime: 2021-01-07 10:16:16
  */
 const connection = require("../app/database");
 const { APP_HOST, APP_PORT } = require("../app/config");
@@ -48,15 +48,16 @@ class fileService {
       console.log("fileService.createFile", error);
     }
   }
-  async createPhoto(filename, mimetype, size, title, content) {
+  async createPhoto(filename, mimetype, size, title, content,width) {
     try {
-      const statement = `INSERT INTO photo (filename, mimetype, size, title, content) VALUES (?, ?, ?, ?, ?)`;
+      const statement = `INSERT INTO photo (filename, mimetype, size, title, content,width) VALUES (?, ?, ?, ?, ?, ?)`;
       const [result] = await connection.execute(statement, [
         filename,
         mimetype,
         size,
         title,
         content,
+        width,
       ]);
       return result;
     } catch (error) {
@@ -76,8 +77,10 @@ class fileService {
   }
   async getPhotoList(page, size) {
     try {
-      const statement = `SELECT id ,title, CONCAT('${APP_HOST}:${APP_PORT}/photo/',filename,'?type=middle') url,size,content,createAt FROM photo LIMIT ?, ?;`;
-      const [result] = await connection.execute(statement, [page, size]);
+      // const statement = `SELECT id ,title, CONCAT('${APP_HOST}:${APP_PORT}/photo/',filename) url,size,content,width,createAt FROM photo LIMIT ?, ?;`;
+      const statement = `SELECT id ,title, CONCAT('${APP_HOST}:${APP_PORT}/photo/',filename) url, width,size,content,createAt FROM photo LIMIT ?, ?;`;
+      // 字符串
+      const [result] = await connection.execute(statement, [ `${page-1}`, size]);
       return result;
     } catch (error) {
       console.log("LabelService.create", error);

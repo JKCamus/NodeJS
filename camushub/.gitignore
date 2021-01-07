@@ -1,6 +1,7 @@
 node_modules
 /dist
 /src/app/keys
+/uploads
 
 # local env files
 .env

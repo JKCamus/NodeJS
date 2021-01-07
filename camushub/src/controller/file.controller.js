@@ -4,11 +4,13 @@
  * @Author: camus
  * @Date: 2020-12-03 20:26:23
  * @LastEditors: camus
- * @LastEditTime: 2020-12-07 23:08:20
+ * @LastEditTime: 2021-01-06 23:09:23
  */
 const { APP_HOST, APP_PORT } = require("../app/config");
 const fileService = require("../service/file.service");
 const userService = require("../service/user.service");
+const errorTypes = require("../constants/error-types");
+
 class FileController {
   async saveAvatarInfo(ctx, next) {
     try {
@@ -49,14 +51,19 @@ class FileController {
     try {
       // 获取图像信息
       const files = ctx.req.files;
-      const {content,title}=ctx.req.body
+      const {content,title,width}=ctx.req.body
+      if (!files.length) {
+        const error = new Error(errorTypes.INVALID_PICTURE);
+        return ctx.app.emit("error", error, ctx);
+      }
       // 将所有的文件信息保存到数据集中
       for (let file of files) {
         const { filename, mimetype, size } = file;
-        await fileService.createPhoto(filename, mimetype, size,title,content);
+        await fileService.createPhoto(filename, mimetype, size,title,content,width);
       }
-      ctx.body = "动态配图上传完成~";
+      ctx.body = "picture-gallery upload success~";
     } catch (error) {
+
       console.log("FileController.savePictureInfo", error);
     }
   }
