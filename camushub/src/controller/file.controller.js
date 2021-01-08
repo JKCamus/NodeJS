@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:26:23
  * @LastEditors: camus
- * @LastEditTime: 2021-01-06 23:09:23
+ * @LastEditTime: 2021-01-08 12:31:20
  */
 const { APP_HOST, APP_PORT } = require("../app/config");
 const fileService = require("../service/file.service");
@@ -50,21 +50,18 @@ class FileController {
   async savePhotoInfo(ctx, next) {
     try {
       // 获取图像信息
-      const files = ctx.req.files;
+      const file = ctx.req.file;
       const {content,title,width}=ctx.req.body
-      if (!files.length) {
+      if (!file) {
         const error = new Error(errorTypes.INVALID_PICTURE);
         return ctx.app.emit("error", error, ctx);
       }
       // 将所有的文件信息保存到数据集中
-      for (let file of files) {
         const { filename, mimetype, size } = file;
         await fileService.createPhoto(filename, mimetype, size,title,content,width);
-      }
       ctx.body = "picture-gallery upload success~";
     } catch (error) {
-
-      console.log("FileController.savePictureInfo", error);
+      console.log("FileController.savePhoto", error);
     }
   }
 }
