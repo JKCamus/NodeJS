@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:26:23
  * @LastEditors: camus
- * @LastEditTime: 2021-01-09 15:52:14
+ * @LastEditTime: 2021-01-09 16:16:06
  */
 const { APP_HOST, APP_PORT } = require("../app/config");
 const fileService = require("../service/file.service");
@@ -52,13 +52,13 @@ class FileController {
       // 获取图像信息
       const file = ctx.req.file;
       const { content, title, width, status, id } = ctx.req.body;
-      if (!file) {
+      if (!file && !id) {
         const error = new Error(errorTypes.INVALID_PICTURE);
         return ctx.app.emit("error", error, ctx);
       }
       // 将所有的文件信息保存到数据集中
-      const { filename, mimetype, size } = file;
-      if (id) {
+      if (!file) {
+        const { filename, mimetype, size } = ctx.req.body;
         await fileService.updatePhoto(
           filename,
           mimetype,
@@ -70,6 +70,7 @@ class FileController {
           id
         );
       } else {
+        const { filename, mimetype, size } = file;
         await fileService.createPhoto(
           filename,
           mimetype,

@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:32:12
  * @LastEditors: camus
- * @LastEditTime: 2021-01-09 15:48:40
+ * @LastEditTime: 2021-01-09 16:14:20
  */
 const connection = require("../app/database");
 const { APP_HOST, APP_PORT } = require("../app/config");
@@ -71,7 +71,16 @@ class fileService {
   /**
    * @description: 上传图片，修改
    */
-  async updatePhoto(filename, mimetype, size, title, content, width, status,id) {
+  async updatePhoto(
+    filename,
+    mimetype,
+    size,
+    title,
+    content,
+    width,
+    status,
+    id
+  ) {
     try {
       const statement = `UPDATE photo
       SET title = ?,
@@ -92,11 +101,11 @@ class fileService {
         size,
         width,
         status,
-        id
+        id,
       ]);
       return result;
     } catch (error) {
-      console.log("fileService.createPhoto", error);
+      console.log("fileService.updatePhoto", error);
     }
   }
 
@@ -126,7 +135,7 @@ class fileService {
   }
   async getAllPhotoList(page, size) {
     try {
-      const statement = `SELECT id ,title, CONCAT('${APP_HOST}:${APP_PORT}/photo/',filename) url, width,size,content,status,createAt FROM photo LIMIT ?, ?;`;
+      const statement = `SELECT id ,title, CONCAT('${APP_HOST}:${APP_PORT}/photo/',filename) url, width,size,content,status,filename,mimetype,size,createAt FROM photo LIMIT ?, ?;`;
       // 字符串
       const [result] = await connection.execute(statement, [
         `${page - 1}`,

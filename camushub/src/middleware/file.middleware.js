@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:15:39
  * @LastEditors: camus
- * @LastEditTime: 2021-01-08 14:08:35
+ * @LastEditTime: 2021-01-09 16:17:11
  */
 const path = require("path");
 const Multer = require("koa-multer");
@@ -32,7 +32,6 @@ const pictureResize = async (ctx, next) => {
     const files = ctx.req.files;
     // 对图像进行处理（sharp,jimp）
     for (let file of files) {
-      console.log("file", file);
       const destPath = path.join(file.destination, file.filename);
       // console.log("destPath", destPath);
       Jimp.read(file.path).then((image) => {
@@ -54,9 +53,10 @@ const photoHandler = photoUpload.single("photo");
 
 const photoResize = async (ctx, next) => {
   try {
-    // 获取所有的图片信息
     const file = ctx.req.file;
-    // 对图像进行处理（sharp,jimp）
+    if (file) {
+      // 获取所有的图片信息
+      // 对图像进行处理（sharp,jimp）
       const destPath = path.join(file.destination, file.filename);
       // console.log("destPath", destPath);
       Jimp.read(file.path).then((image) => {
@@ -64,22 +64,17 @@ const photoResize = async (ctx, next) => {
         image.resize(640, Jimp.AUTO).write(`${destPath}-middle`);
         image.resize(320, Jimp.AUTO).write(`${destPath}-small`);
       });
+    }
     await next();
   } catch (error) {
     console.log("photoResize", error);
   }
 };
 
-
-
-
-
-
-
 module.exports = {
   avatarHandler,
   pictureResize,
   pictureHandler,
   photoHandler,
-  photoResize
+  photoResize,
 };
