@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:32:12
  * @LastEditors: camus
- * @LastEditTime: 2021-01-08 13:39:25
+ * @LastEditTime: 2021-01-09 15:48:40
  */
 const connection = require("../app/database");
 const { APP_HOST, APP_PORT } = require("../app/config");
@@ -48,9 +48,12 @@ class fileService {
       console.log("fileService.createFile", error);
     }
   }
-  async createPhoto(filename, mimetype, size, title, content, width) {
+  /**
+   * @description: 上传图片，入库
+   */
+  async createPhoto(filename, mimetype, size, title, content, width, status) {
     try {
-      const statement = `INSERT INTO photo (filename, mimetype, size, title, content,width) VALUES (?, ?, ?, ?, ?, ?)`;
+      const statement = `INSERT INTO photo (filename, mimetype, size, title, content,width,status) VALUES (?, ?, ?, ?, ?, ?, ?)`;
       const [result] = await connection.execute(statement, [
         filename,
         mimetype,
@@ -58,6 +61,38 @@ class fileService {
         title,
         content,
         width,
+        status,
+      ]);
+      return result;
+    } catch (error) {
+      console.log("fileService.createPhoto", error);
+    }
+  }
+  /**
+   * @description: 上传图片，修改
+   */
+  async updatePhoto(filename, mimetype, size, title, content, width, status,id) {
+    try {
+      const statement = `UPDATE photo
+      SET title = ?,
+      content = ?,
+      filename = ?,
+      mimetype = ?,
+      size = ?,
+      width = ?,
+      STATUS = ?
+
+      WHERE
+        id = ?;`;
+      const [result] = await connection.execute(statement, [
+        title,
+        content,
+        filename,
+        mimetype,
+        size,
+        width,
+        status,
+        id
       ]);
       return result;
     } catch (error) {
