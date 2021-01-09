@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:32:12
  * @LastEditors: camus
- * @LastEditTime: 2021-01-07 10:16:16
+ * @LastEditTime: 2021-01-08 13:39:25
  */
 const connection = require("../app/database");
 const { APP_HOST, APP_PORT } = require("../app/config");
@@ -48,7 +48,7 @@ class fileService {
       console.log("fileService.createFile", error);
     }
   }
-  async createPhoto(filename, mimetype, size, title, content,width) {
+  async createPhoto(filename, mimetype, size, title, content, width) {
     try {
       const statement = `INSERT INTO photo (filename, mimetype, size, title, content,width) VALUES (?, ?, ?, ?, ?, ?)`;
       const [result] = await connection.execute(statement, [
@@ -78,14 +78,31 @@ class fileService {
   async getPhotoList(page, size) {
     try {
       // const statement = `SELECT id ,title, CONCAT('${APP_HOST}:${APP_PORT}/photo/',filename) url,size,content,width,createAt FROM photo LIMIT ?, ?;`;
-      const statement = `SELECT id ,title, CONCAT('${APP_HOST}:${APP_PORT}/photo/',filename) url, width,size,content,createAt FROM photo LIMIT ?, ?;`;
+      const statement = `SELECT id ,title, CONCAT('${APP_HOST}:${APP_PORT}/photo/',filename) url, width,size,content,createAt FROM photo WHERE status = 1 LIMIT ?, ?;`;
       // 字符串
-      const [result] = await connection.execute(statement, [ `${page-1}`, size]);
+      const [result] = await connection.execute(statement, [
+        `${page - 1}`,
+        size,
+      ]);
       return result;
     } catch (error) {
       console.log("LabelService.create", error);
     }
   }
+  async getAllPhotoList(page, size) {
+    try {
+      const statement = `SELECT id ,title, CONCAT('${APP_HOST}:${APP_PORT}/photo/',filename) url, width,size,content,status,createAt FROM photo LIMIT ?, ?;`;
+      // 字符串
+      const [result] = await connection.execute(statement, [
+        `${page - 1}`,
+        size,
+      ]);
+      return result;
+    } catch (error) {
+      console.log("LabelService.create", error);
+    }
+  }
+
   async getFilePhotoByUrl(filename) {
     try {
       // console.log('filename',filename )

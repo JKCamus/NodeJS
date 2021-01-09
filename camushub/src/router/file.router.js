@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:08:55
  * @LastEditors: camus
- * @LastEditTime: 2020-12-07 23:00:44
+ * @LastEditTime: 2021-01-08 14:08:44
  */
 const Router = require("koa-router");
 const { verifyAuth } = require("../middleware/auth.middleware");
@@ -36,4 +36,5 @@ fileRouter.post(
   photoResize,
   savePhotoInfo
 );
+
 module.exports = fileRouter;

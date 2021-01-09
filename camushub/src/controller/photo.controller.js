@@ -37,5 +37,16 @@ class PhotoController {
       console.log("PhotoController.fileInfo", error);
     }
   }
+  async getAllPhotos(ctx, next) {
+    try {
+      const { size, page } = ctx.query;
+      if (!size || !page) throw new Error();
+      const result = await fileService.getAllPhotoList(page, size);
+      ctx.body = result;
+    } catch (error) {
+      console.log("PhotoController.create", error);
+    }
+  }
+
 }
 module.exports = new PhotoController();
