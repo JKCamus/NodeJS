@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:26:23
  * @LastEditors: camus
- * @LastEditTime: 2021-01-09 16:16:06
+ * @LastEditTime: 2021-01-09 21:43:08
  */
 const { APP_HOST, APP_PORT } = require("../app/config");
 const fileService = require("../service/file.service");
@@ -83,7 +83,7 @@ class FileController {
       }
       ctx.body = "update success~";
     } catch (error) {
-      console.log("FileController.savePhoto", error);
+      console.log("FileController.savePhotoInfo", error);
     }
   }
 }

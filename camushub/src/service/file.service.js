@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:32:12
  * @LastEditors: camus
- * @LastEditTime: 2021-01-09 16:14:20
+ * @LastEditTime: 2021-01-09 21:40:38
  */
 const connection = require("../app/database");
 const { APP_HOST, APP_PORT } = require("../app/config");
@@ -157,5 +157,26 @@ class fileService {
       console.log("fileService.getFileByFilename", error);
     }
   }
+async getClearPhotoList(){
+  try {
+    const statement = `SELECT filename FROM photo WHERE status = 0;`;
+    const [result] = await connection.execute(statement);
+    return result
+  } catch (error) {
+    console.log("fileService.getClearPhotoList", error);
+  }
+}
+async clearPhotoList(){
+  try {
+    const statement = `DELETE FROM photo WHERE status = 0;`;
+    const [result] = await connection.execute(statement);
+    return result
+  } catch (error) {
+    console.log("fileService.getClearPhotoList", error);
+  }
+}
+
+
+
 }
 module.exports = new fileService();

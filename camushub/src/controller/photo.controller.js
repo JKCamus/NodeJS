@@ -4,11 +4,13 @@
  * @Author: camus
  * @Date: 2020-12-07 23:22:17
  * @LastEditors: camus
- * @LastEditTime: 2021-01-06 22:30:43
+ * @LastEditTime: 2021-01-09 21:49:54
  */
 const fs = require("fs");
 const fileService = require("../service/file.service");
 const { PHOTO_PATH } = require("../constants/file.path");
+const path = require("path");
+
 class PhotoController {
   async getPhotos(ctx, next) {
     try {
@@ -44,9 +46,36 @@ class PhotoController {
       const result = await fileService.getAllPhotoList(page, size);
       ctx.body = result;
     } catch (error) {
-      console.log("PhotoController.create", error);
+      console.log("PhotoController.getAllPhotos", error);
     }
   }
-
+  async clearPhotos(ctx, next) {
+    try {
+      const result = await fileService.getClearPhotoList();
+      let readDir = fs.readdirSync(PHOTO_PATH);
+      const filenameSet = new Set(result.map((item) => item.filename));
+      for (let del of readDir) {
+        if (filenameSet.has(del)) {
+          // console.log("del", path.resolve(PHOTO_PATH, `${del}-large`));
+          fs.unlink(path.resolve(PHOTO_PATH, `${del}-large`), (err) => {
+            if (err) throw err;
+          });
+          fs.unlink(path.resolve(PHOTO_PATH, `${del}-small`), (err) => {
+            if (err) throw err;
+          });
+          fs.unlink(path.resolve(PHOTO_PATH, `${del}-middle`), (err) => {
+            if (err) throw err;
+          });
+          fs.unlink(path.resolve(PHOTO_PATH, del), (err) => {
+            if (err) throw err;
+          });
+        }
+      }
+      await fileService.clearPhotoList();
+      ctx.body = "清除成功";
+    } catch (error) {
+      console.log("PhotoController.clearPhotos", error);
+    }
+  }
 }
 module.exports = new PhotoController();
