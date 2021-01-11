@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:15:39
  * @LastEditors: camus
- * @LastEditTime: 2021-01-09 16:17:11
+ * @LastEditTime: 2021-01-11 15:59:04
  */
 const path = require("path");
 const Multer = require("koa-multer");
@@ -14,6 +14,7 @@ const {
   AVATAR_PATH,
   PICTURE_PATH,
   PHOTO_PATH,
+  DEMO_IMAGE_PATH,
 } = require("../constants/file.path");
 // 头像上传地址
 const avatarUpload = Multer({
@@ -46,11 +47,18 @@ const pictureResize = async (ctx, next) => {
   }
 };
 
+/**
+ * @description: 单图上传
+ */
 const photoUpload = Multer({
   dest: PHOTO_PATH,
 });
 const photoHandler = photoUpload.single("photo");
 
+/**
+ * @description: 多存在种尺寸
+ * @param {*} next
+ */
 const photoResize = async (ctx, next) => {
   try {
     const file = ctx.req.file;
@@ -71,10 +79,26 @@ const photoResize = async (ctx, next) => {
   }
 };
 
+/**
+ * @description: demo图片上传
+ */
+const demoImageUpload = Multer({
+  dest: DEMO_IMAGE_PATH,
+});
+// 多文件不同名字上传文件
+const demoFieldsHandle = demoImageUpload.fields([
+  { name: "image", maxCount: 1 },
+  { name: "htmlContent", maxCount: 1 },
+]);
+
+// const demoImageHandle = demoImageUpload.array("files", 2);
+
 module.exports = {
   avatarHandler,
   pictureResize,
   pictureHandler,
   photoHandler,
   photoResize,
+  // demoImageHandle,
+  demoFieldsHandle
 };

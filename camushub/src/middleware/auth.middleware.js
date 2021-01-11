@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-26 11:04:11
  * @LastEditors: camus
- * @LastEditTime: 2020-12-03 09:43:40
+ * @LastEditTime: 2021-01-11 15:28:47
  */
 const { PUBLIC_KEY } = require("../app/config");
 const jwt = require("jsonwebtoken");
@@ -65,6 +65,7 @@ const verifyAuth = async (ctx, next) => {
     ctx.user = result;
     await next();
   } catch (err) {
+    console.log('ddd', err)
     const error = new Error(errorTypes.UNAUTHORIZED);
     ctx.app.emit("error", error, ctx);
   }

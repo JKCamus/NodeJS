@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:26:23
  * @LastEditors: camus
- * @LastEditTime: 2021-01-09 21:43:08
+ * @LastEditTime: 2021-01-11 14:40:15
  */
 const { APP_HOST, APP_PORT } = require("../app/config");
 const fileService = require("../service/file.service");
@@ -25,7 +25,6 @@ class FileController {
       );
       const avatarUrl = `${APP_HOST}:${APP_PORT}/users/${id}/avatar`;
       await userService.updateAvatarUrlById(avatarUrl, id);
-
       ctx.body = "上传头像成功";
     } catch (error) {
       console.log("FileController.saveAvatarInfo", error);
