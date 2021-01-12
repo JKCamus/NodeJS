@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2021-01-11 21:12:35
  * @LastEditors: camus
- * @LastEditTime: 2021-01-11 23:00:29
+ * @LastEditTime: 2021-01-12 20:59:50
  */
 const connection = require("../app/database");
 const { APP_HOST, APP_PORT } = require("../app/config");
@@ -18,7 +18,7 @@ class DemoService {
     imgFilename,
     imgMimetype,
     size,
-    htmlFilename
+    htmlContent
   ) {
     try {
       const statement = `INSERT INTO demo (filename, mimetype, size, title, htmlContent,preview,status,user_id) VALUES (?, ?, ?, ?, ?, ?, ?,?)`;
@@ -27,7 +27,7 @@ class DemoService {
         imgMimetype,
         size,
         title,
-        htmlFilename,
+        htmlContent,
         preview,
         status,
         userId,

@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2021-01-11 13:36:25
  * @LastEditors: camus
- * @LastEditTime: 2021-01-11 23:26:55
+ * @LastEditTime: 2021-01-12 21:17:03
  */
 const fs = require("fs");
 const DemoService = require("../service/demo.service");
@@ -12,14 +12,9 @@ class DemoController {
   async saveDemoInfo(ctx, next) {
     try {
       const userId = ctx.user.id;
-      const files = ctx.req.files;
-      const { title, preview, status } = ctx.req.body;
-      const {
-        filename: imgFilename,
-        mimetype: imgMimetype,
-        size,
-      } = files.image[0];
-      const { filename: htmlFilename } = files.htmlContent[0];
+      const file = ctx.req.file;
+      const { title, preview, status, htmlContent } = ctx.req.body;
+      const { filename: imgFilename, mimetype: imgMimetype, size } = file;
       const result = await DemoService.createDemoInfo(
         userId,
         title,
@@ -28,7 +23,7 @@ class DemoController {
         imgFilename,
         imgMimetype,
         size,
-        htmlFilename
+        htmlContent
       );
       ctx.body = "saveDemoInfo success~";
     } catch (error) {
@@ -41,13 +36,9 @@ class DemoController {
       if (!size || !page) throw new Error();
       const res = await DemoService.getDemoList(page, size);
       const result = res.map((item) => {
-        const htmlContent = fs.readFileSync(
-          `./uploads/demoImages/${item.htmlContent}`,
-          "utf8"
-        );
         return {
           ...item,
-          htmlContent:htmlContent||'',
+          htmlContent: `${Buffer.from(item.htmlContent)}`,
         };
       });
       ctx.body = await result;
