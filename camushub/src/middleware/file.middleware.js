@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:15:39
  * @LastEditors: camus
- * @LastEditTime: 2021-01-11 15:59:04
+ * @LastEditTime: 2021-01-12 20:56:56
  */
 const path = require("path");
 const Multer = require("koa-multer");
@@ -86,10 +86,11 @@ const demoImageUpload = Multer({
   dest: DEMO_IMAGE_PATH,
 });
 // 多文件不同名字上传文件
-const demoFieldsHandle = demoImageUpload.fields([
-  { name: "image", maxCount: 1 },
-  { name: "htmlContent", maxCount: 1 },
-]);
+// const demoFieldsHandle = demoImageUpload.fields([
+//   { name: "image", maxCount: 1 },
+//   { name: "htmlContent", maxCount: 1 },
+// ]);
+const demoFieldsHandle = demoImageUpload.single("image");
 
 // const demoImageHandle = demoImageUpload.array("files", 2);
 
