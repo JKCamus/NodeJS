@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2021-01-11 13:36:25
  * @LastEditors: camus
- * @LastEditTime: 2021-01-12 21:17:03
+ * @LastEditTime: 2021-01-13 09:34:09
  */
 const fs = require("fs");
 const DemoService = require("../service/demo.service");
@@ -15,6 +15,10 @@ class DemoController {
       const file = ctx.req.file;
       const { title, preview, status, htmlContent } = ctx.req.body;
       const { filename: imgFilename, mimetype: imgMimetype, size } = file;
+      // console.log('imgFilename',imgFilename )
+      // console.log('imgMimetype',imgMimetype )
+      // 所有图片上传需要再做一层判断，判断是否是是jpg等图像文件
+
       const result = await DemoService.createDemoInfo(
         userId,
         title,
