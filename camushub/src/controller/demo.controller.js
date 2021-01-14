@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2021-01-11 13:36:25
  * @LastEditors: camus
- * @LastEditTime: 2021-01-14 13:50:09
+ * @LastEditTime: 2021-01-14 14:14:53
  */
 const fs = require("fs");
 const DemoService = require("../service/demo.service");
@@ -66,7 +66,7 @@ class DemoController {
       const res = await DemoService.getDemoList(page, size);
       const result = res.map((item) => {
         const htmlContent = fs.readFileSync(
-          `./uploads/demoImages/${item.htmlContent}`,
+          `./uploads/demoFiles/${item.htmlName}`,
           "utf8"
         );
         return {
