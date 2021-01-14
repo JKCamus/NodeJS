@@ -4,18 +4,35 @@
  * @Author: camus
  * @Date: 2020-12-03 20:15:39
  * @LastEditors: camus
- * @LastEditTime: 2021-01-12 20:56:56
+ * @LastEditTime: 2021-01-13 22:12:19
  */
 const path = require("path");
 const Multer = require("koa-multer");
+const errorTypes = require("../constants/error-types");
 
 const Jimp = require("jimp");
 const {
   AVATAR_PATH,
   PICTURE_PATH,
   PHOTO_PATH,
-  DEMO_IMAGE_PATH,
+  DEMO_FILE_PATH,
 } = require("../constants/file.path");
+
+const fileFilter = (req, file, cb) => {
+  // const extension = path.extname(file.originalname).toLowerCase();
+  const mimetype = file.mimetype;
+  if (
+    !(
+      mimetype === "image/png" ||
+      mimetype === "image/jpg" ||
+      mimetype === "image/jpeg" ||
+      mimetype === "image/gif"
+    )
+  ) {
+    cb("error message", true);
+  }
+  cb(null, true);
+};
 // 头像上传地址
 const avatarUpload = Multer({
   dest: AVATAR_PATH,
@@ -52,8 +69,18 @@ const pictureResize = async (ctx, next) => {
  */
 const photoUpload = Multer({
   dest: PHOTO_PATH,
+  fileFilter,
 });
 const photoHandler = photoUpload.single("photo");
+
+const handlePhotoHandler = async (ctx, next) => {
+  try {
+    await next();
+  } catch (error) {
+    const err = new Error(errorTypes.INVALID_PICTURE);
+    return ctx.app.emit("error", err, ctx);
+  }
+};
 
 /**
  * @description: 多存在种尺寸
@@ -83,14 +110,14 @@ const photoResize = async (ctx, next) => {
  * @description: demo图片上传
  */
 const demoImageUpload = Multer({
-  dest: DEMO_IMAGE_PATH,
+  dest: DEMO_FILE_PATH,
 });
 // 多文件不同名字上传文件
-// const demoFieldsHandle = demoImageUpload.fields([
-//   { name: "image", maxCount: 1 },
-//   { name: "htmlContent", maxCount: 1 },
-// ]);
-const demoFieldsHandle = demoImageUpload.single("image");
+const demoFieldsHandle = demoImageUpload.fields([
+  { name: "image", maxCount: 1 },
+  { name: "htmlContent", maxCount: 1 },
+]);
+// const demoFieldsHandle = demoImageUpload.single("image");
 
 // const demoImageHandle = demoImageUpload.array("files", 2);
 
@@ -100,6 +127,7 @@ module.exports = {
   pictureHandler,
   photoHandler,
   photoResize,
+  handlePhotoHandler,
   // demoImageHandle,
-  demoFieldsHandle
+  demoFieldsHandle,
 };
