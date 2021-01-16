@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2021-01-11 21:12:35
  * @LastEditors: camus
- * @LastEditTime: 2021-01-16 15:31:17
+ * @LastEditTime: 2021-01-16 16:15:58
  */
 const connection = require("../app/database");
 const { APP_HOST, APP_PORT } = require("../app/config");
@@ -41,7 +41,7 @@ class DemoService {
     try {
       const statement = `
       SELECT
-      d.id id,d.title title,CONCAT('${APP_HOST}:${APP_PORT}/image/demoFiles/',d.filename) img,d.htmlName,d.status,d.mimetype imageMimetype,d.preview,
+      d.id id,d.title title,CONCAT('${APP_HOST}:${APP_PORT}/image/demoFiles/',d.filename) img,d.htmlName,CONCAT('${APP_HOST}:${APP_PORT}/fileHosting/demoFiles/',d.htmlName) htmlUrl,d.status,d.mimetype imageMimetype,d.preview,
       JSON_OBJECT('userId', u.id, 'name', u.name,'avatar',CONCAT('${APP_HOST}:${APP_PORT}/demoImages/',a.filename)) author
     FROM demo d
     LEFT JOIN user u ON d.user_id = u.id

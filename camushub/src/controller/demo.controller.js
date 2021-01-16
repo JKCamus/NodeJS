@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2021-01-11 13:36:25
  * @LastEditors: camus
- * @LastEditTime: 2021-01-16 15:36:22
+ * @LastEditTime: 2021-01-16 16:17:56
  */
 const fs = require("fs");
 const DemoService = require("../service/demo.service");
@@ -71,6 +71,7 @@ class DemoController {
         return {
           ...item,
           htmlContent: htmlContent || "",
+          htmlUrl:item.htmlName?item.htmlUrl:''
         };
       });
       ctx.body = await result;
