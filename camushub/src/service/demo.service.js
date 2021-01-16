@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2021-01-11 21:12:35
  * @LastEditors: camus
- * @LastEditTime: 2021-01-16 20:55:03
+ * @LastEditTime: 2021-01-16 22:24:16
  */
 const connection = require("../app/database");
 const { APP_HOST, APP_PORT } = require("../app/config");
@@ -58,7 +58,7 @@ class DemoService {
   }
 
   /**
-   * @description: 上传图片，修改
+   * @description: 上传Notes，修改
    */
   async updateDemo(updateData) {
     const {
@@ -88,6 +88,31 @@ class DemoService {
       return result;
     } catch (error) {
       console.log("fileService.updatePhoto", error);
+    }
+  }
+  async getClearNotesList() {
+    try {
+      const statementStatus = `SELECT filename,htmlName  FROM demo WHERE status = 0 ;`;
+      const statementClearHtml = `SELECT htmlName,filename FROM demo `;
+      const [clearStatus] = await connection.execute(statementStatus);
+      const [clearHtml] = await connection.execute(statementClearHtml);
+      return {
+        clearHtml,
+        clearStatus,
+      };
+    } catch (error) {
+      console.log("fileService.getClearPhotoList", error);
+    }
+  }
+
+  async clearNotes() {
+    try {
+      const statement = `DELETE FROM demo WHERE status = 0;`;
+      const [result] = await connection.execute(statement);
+
+      return result;
+    } catch (error) {
+      console.log("fileService.getClearPhotoList", error);
     }
   }
 }

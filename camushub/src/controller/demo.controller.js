@@ -4,10 +4,13 @@
  * @Author: camus
  * @Date: 2021-01-11 13:36:25
  * @LastEditors: camus
- * @LastEditTime: 2021-01-16 19:55:00
+ * @LastEditTime: 2021-01-16 22:40:13
  */
 const fs = require("fs");
 const DemoService = require("../service/demo.service");
+const { DEMO_FILE_PATH } = require("../constants/file.path");
+const path = require("path");
+
 class DemoController {
   async saveDemoInfo(ctx, next) {
     try {
@@ -95,6 +98,43 @@ class DemoController {
       ctx.body = await result;
     } catch (error) {
       console.log("DemoService.getDemoList", error);
+    }
+  }
+  async clearNotes(ctx, next) {
+    try {
+      const { clearHtml, clearStatus } = await DemoService.getClearNotesList();
+      let readDir = fs.readdirSync(DEMO_FILE_PATH);
+      const clearHtmlArr = [];
+      clearHtml.forEach((item) => {
+        clearHtmlArr.push(item.htmlName);
+        clearHtmlArr.push(item.filename);
+      });
+      const clearStatusArr = [];
+      clearStatus.forEach((item) => {
+        clearStatusArr.push(item.htmlName);
+        clearStatusArr.push(item.filename);
+      });
+      const htmlNameSet = new Set([...clearHtmlArr]);
+      const statusClearSet = new Set([...clearStatusArr]);
+      for (let del of readDir) {
+        if (!htmlNameSet.has(del)) {
+          // console.log("del", del);
+          // console.log("del", path.resolve(DEMO_FILE_PATH, `${del}`));
+          fs.unlink(path.resolve(DEMO_FILE_PATH, `${del}`), (err) => {
+            if (err) throw err;
+          });
+        }
+        if (statusClearSet.has(del)) {
+          fs.unlink(path.resolve(DEMO_FILE_PATH, `${del}`), (err) => {
+            if (err) throw err;
+          });
+        }
+      }
+      // await fileService.clearPhotoList();
+      const result = await DemoService.clearNotes();
+      ctx.body = "清除成功";
+    } catch (error) {
+      console.log("PhotoController.clearPhotos", error);
     }
   }
 }
