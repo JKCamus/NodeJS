@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2021-01-11 13:36:25
  * @LastEditors: camus
- * @LastEditTime: 2021-01-16 16:17:56
+ * @LastEditTime: 2021-01-16 19:55:00
  */
 const fs = require("fs");
 const DemoService = require("../service/demo.service");
@@ -13,30 +13,48 @@ class DemoController {
     try {
       const userId = ctx.user.id;
       const files = ctx.req.files;
-      const { title, preview, status } = ctx.req.body;
-      const {
-        filename: imgFilename,
-        mimetype: imgMimetype,
-        size,
-      } = files.image[0];
+      const { title, preview, status, htmlName, id } = ctx.req.body;
+      if (id) {
+        const imgFilename = files.image && files.image[0].filename;
+        const imgMimetype = files.image && files.image[0].mimetype;
+        let htmlFilename = "";
+        if (files.htmlContent) {
+          htmlFilename = files.htmlContent && files.htmlContent[0].filename;
+        } else {
+          htmlFilename = ctx.req.body.htmlName || "";
+        }
+        const updateData = {
+          id,
+          title,
+          preview,
+          status,
+          imgFilename,
+          imgMimetype,
+          htmlFilename,
+        };
+        await DemoService.updateDemo(updateData);
+        ctx.body = "Update Note Success~";
+      } else {
+        const { filename: imgFilename, mimetype: imgMimetype } = files.image[0];
+        const htmlFilename = files.htmlContent && files.htmlContent[0].filename;
+        const result = await DemoService.createDemoInfo(
+          userId,
+          title,
+          preview,
+          status,
+          imgFilename,
+          imgMimetype,
+          htmlFilename
+        );
+        ctx.body = "Create Note success~";
+      }
+
       // image/gif
       // console.log('imgMimetype', imgMimetype)
-      const htmlFilename = files.htmlContent && files.htmlContent[0].filename;
 
       // console.log('imgFilename',imgFilename )
       // console.log('imgMimetype',imgMimetype )
       // 所有图片上传需要再做一层判断，判断是否是是jpg等图像文件
-      const result = await DemoService.createDemoInfo(
-        userId,
-        title,
-        preview,
-        status,
-        imgFilename,
-        imgMimetype,
-        size,
-        htmlFilename
-      );
-      ctx.body = "saveDemoInfo success~";
     } catch (error) {
       console.log("DemoController.saveDemoInfo", error);
     }
@@ -71,7 +89,7 @@ class DemoController {
         return {
           ...item,
           htmlContent: htmlContent || "",
-          htmlUrl:item.htmlName?item.htmlUrl:''
+          htmlUrl: item.htmlName ? item.htmlUrl : "",
         };
       });
       ctx.body = await result;

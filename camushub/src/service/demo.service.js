@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2021-01-11 21:12:35
  * @LastEditors: camus
- * @LastEditTime: 2021-01-16 16:15:58
+ * @LastEditTime: 2021-01-16 20:55:03
  */
 const connection = require("../app/database");
 const { APP_HOST, APP_PORT } = require("../app/config");
@@ -17,15 +17,13 @@ class DemoService {
     status,
     imgFilename,
     imgMimetype,
-    size,
-    htmlContent=''
+    htmlContent = ""
   ) {
     try {
-      const statement = `INSERT INTO demo (filename, mimetype, size, title, htmlName,preview,status,user_id) VALUES (?, ?, ?, ?, ?, ?, ?,?)`;
+      const statement = `INSERT INTO demo (filename, mimetype, title, htmlName,preview,status,user_id) VALUES (?, ?, ?, ?, ?, ?,?)`;
       const [result] = await connection.execute(statement, [
         imgFilename,
         imgMimetype,
-        size,
         title,
         htmlContent,
         preview,
@@ -56,6 +54,40 @@ class DemoService {
       return result;
     } catch (error) {
       console.log("DemoController.getDemoList", error);
+    }
+  }
+
+  /**
+   * @description: 上传图片，修改
+   */
+  async updateDemo(updateData) {
+    const {
+      id,
+      title,
+      preview,
+      status,
+      imgFilename,
+      imgMimetype,
+      htmlFilename,
+    } = updateData;
+    try {
+      const statement = `UPDATE demo
+      SET title = ?,
+      preview = ?,
+      htmlName = ?,
+      STATUS = ?
+      ${imgFilename ? ",filename = ?," : ""}
+      ${imgFilename ? "mimetype = ?" : ""}
+      WHERE
+        id = ?;`;
+
+      const executeData = imgFilename
+        ? [title, preview, htmlFilename, status, imgFilename, imgMimetype, id]
+        : [title, preview, htmlFilename, status, id];
+      const [result] = await connection.execute(statement, executeData);
+      return result;
+    } catch (error) {
+      console.log("fileService.updatePhoto", error);
     }
   }
 }
