@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2021-01-11 13:36:25
  * @LastEditors: camus
- * @LastEditTime: 2021-01-14 14:14:53
+ * @LastEditTime: 2021-01-16 15:36:22
  */
 const fs = require("fs");
 const DemoService = require("../service/demo.service");
@@ -21,7 +21,7 @@ class DemoController {
       } = files.image[0];
       // image/gif
       // console.log('imgMimetype', imgMimetype)
-      const { filename: htmlFilename } = files.htmlContent[0];
+      const htmlFilename = files.htmlContent && files.htmlContent[0].filename;
 
       // console.log('imgFilename',imgFilename )
       // console.log('imgMimetype',imgMimetype )
@@ -65,13 +65,12 @@ class DemoController {
       if (!size || !page) throw new Error();
       const res = await DemoService.getDemoList(page, size);
       const result = res.map((item) => {
-        const htmlContent = fs.readFileSync(
-          `./uploads/demoFiles/${item.htmlName}`,
-          "utf8"
-        );
+        const htmlContent =
+          item.htmlName &&
+          fs.readFileSync(`./uploads/demoFiles/${item.htmlName}`, "utf8");
         return {
           ...item,
-          htmlContent:htmlContent||'',
+          htmlContent: htmlContent || "",
         };
       });
       ctx.body = await result;
@@ -79,6 +78,5 @@ class DemoController {
       console.log("DemoService.getDemoList", error);
     }
   }
-
 }
 module.exports = new DemoController();
