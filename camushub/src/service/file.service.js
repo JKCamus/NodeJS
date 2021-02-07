@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:32:12
  * @LastEditors: camus
- * @LastEditTime: 2021-01-09 21:40:38
+ * @LastEditTime: 2021-02-07 13:30:59
  */
 const connection = require("../app/database");
 const { APP_HOST, APP_PORT } = require("../app/config");
@@ -51,9 +51,29 @@ class fileService {
   /**
    * @description: 上传图片，入库
    */
-  async createPhoto(filename, mimetype, size, title, content, width, status) {
+  async createPhoto(
+    filename,
+    mimetype,
+    size,
+    title,
+    content,
+    width,
+    status,
+    userId
+  ) {
+    console.log(
+      "",
+      filename,
+      mimetype,
+      size,
+      title,
+      content,
+      width,
+      status,
+      userId
+    );
     try {
-      const statement = `INSERT INTO photo (filename, mimetype, size, title, content,width,status) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+      const statement = `INSERT INTO photo (filename, mimetype, size, title, content,width,status,user_id) VALUES (?, ?, ?, ?, ?, ?, ?,?)`;
       const [result] = await connection.execute(statement, [
         filename,
         mimetype,
@@ -62,6 +82,7 @@ class fileService {
         content,
         width,
         status,
+        userId,
       ]);
       return result;
     } catch (error) {
@@ -157,26 +178,23 @@ class fileService {
       console.log("fileService.getFileByFilename", error);
     }
   }
-async getClearPhotoList(){
-  try {
-    const statement = `SELECT filename FROM photo WHERE status = 0;`;
-    const [result] = await connection.execute(statement);
-    return result
-  } catch (error) {
-    console.log("fileService.getClearPhotoList", error);
+  async getClearPhotoList() {
+    try {
+      const statement = `SELECT filename FROM photo WHERE status = 0;`;
+      const [result] = await connection.execute(statement);
+      return result;
+    } catch (error) {
+      console.log("fileService.getClearPhotoList", error);
+    }
   }
-}
-async clearPhotoList(){
-  try {
-    const statement = `DELETE FROM photo WHERE status = 0;`;
-    const [result] = await connection.execute(statement);
-    return result
-  } catch (error) {
-    console.log("fileService.getClearPhotoList", error);
+  async clearPhotoList() {
+    try {
+      const statement = `DELETE FROM photo WHERE status = 0;`;
+      const [result] = await connection.execute(statement);
+      return result;
+    } catch (error) {
+      console.log("fileService.getClearPhotoList", error);
+    }
   }
-}
-
-
-
 }
 module.exports = new fileService();

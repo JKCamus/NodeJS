@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:26:23
  * @LastEditors: camus
- * @LastEditTime: 2021-01-13 16:13:18
+ * @LastEditTime: 2021-02-07 13:32:55
  */
 const { APP_HOST, APP_PORT } = require("../app/config");
 const fileService = require("../service/file.service");
@@ -50,7 +50,7 @@ class FileController {
     try {
       // 获取图像信息
       const file = ctx.req.file;
-      // console.log('====',ctx.req.body )
+      const { id:user_id } = ctx.user;
       const { content, title, width, status, id } = ctx.req.body;
       if (!file && !id) {
         const error = new Error(errorTypes.INVALID_PICTURE);
@@ -78,7 +78,8 @@ class FileController {
           title,
           content,
           width,
-          status
+          status,
+          user_id
         );
       }
       ctx.body = "update success~";
