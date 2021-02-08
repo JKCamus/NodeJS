@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-11-26 11:04:11
  * @LastEditors: camus
- * @LastEditTime: 2021-02-07 14:18:06
+ * @LastEditTime: 2021-02-07 17:43:20
  */
 const { PUBLIC_KEY } = require("../app/config");
 const jwt = require("jsonwebtoken");
@@ -65,7 +65,7 @@ const verifyAuth = async (ctx, next) => {
     ctx.user = result;
     await next();
   } catch (err) {
-    console.log('err', err)
+    console.log("err", err);
     const error = new Error(errorTypes.UNAUTHORIZED);
     ctx.app.emit("error", error, ctx);
   }
@@ -79,12 +79,12 @@ const verifyAuth = async (ctx, next) => {
 const verifyPermission = async (ctx, next) => {
   console.log("鉴权middleware");
   // 获取参数{commentId:'10'}
-  console.log('ssssbody',  ctx.req)
+  // console.log('ssssbody',  ctx.req)
   const [resourceKey] = Object.keys(ctx.params);
   // 规范命名后，可以获取表名。表名+Id就是这个信息的id
 
   const tableName = resourceKey.replace("Id", "");
-  const resourceId = ctx.params[resourceKey];
+  const resourceId = Number(ctx.params[resourceKey]);
 
   const { id } = ctx.user;
   try {

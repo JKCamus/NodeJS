@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:26:23
  * @LastEditors: camus
- * @LastEditTime: 2021-02-07 13:32:55
+ * @LastEditTime: 2021-02-08 09:35:59
  */
 const { APP_HOST, APP_PORT } = require("../app/config");
 const fileService = require("../service/file.service");
@@ -50,15 +50,24 @@ class FileController {
     try {
       // 获取图像信息
       const file = ctx.req.file;
-      const { id:user_id } = ctx.user;
+      const { id: user_id } = ctx.user;
       const { content, title, width, status, id } = ctx.req.body;
       if (!file && !id) {
         const error = new Error(errorTypes.INVALID_PICTURE);
         return ctx.app.emit("error", error, ctx);
       }
       // 将所有的文件信息保存到数据集中
-      if (!file) {
-        const { filename, mimetype, size } = ctx.req.body;
+      if (id) {
+        let filename, mimetype, size;
+        if (file&&file["filename"]) {
+          filename = file.filename;
+          mimetype = file.mimetype;
+          size = file.size;
+        } else {
+          filename = ctx.req.body.filename;
+          mimetype = ctx.req.body.mimetype;
+          size = ctx.req.body.size;
+        }
         await fileService.updatePhoto(
           filename,
           mimetype,

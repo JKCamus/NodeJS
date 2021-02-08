@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2021-01-11 13:36:25
  * @LastEditors: camus
- * @LastEditTime: 2021-01-16 22:40:13
+ * @LastEditTime: 2021-02-08 09:12:31
  */
 const fs = require("fs");
 const DemoService = require("../service/demo.service");
@@ -51,12 +51,6 @@ class DemoController {
         );
         ctx.body = "Create Note success~";
       }
-
-      // image/gif
-      // console.log('imgMimetype', imgMimetype)
-
-      // console.log('imgFilename',imgFilename )
-      // console.log('imgMimetype',imgMimetype )
       // 所有图片上传需要再做一层判断，判断是否是是jpg等图像文件
     } catch (error) {
       console.log("DemoController.saveDemoInfo", error);
