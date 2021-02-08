@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:32:12
  * @LastEditors: camus
- * @LastEditTime: 2021-02-07 13:30:59
+ * @LastEditTime: 2021-02-08 09:37:05
  */
 const connection = require("../app/database");
 const { APP_HOST, APP_PORT } = require("../app/config");
@@ -61,17 +61,6 @@ class fileService {
     status,
     userId
   ) {
-    console.log(
-      "",
-      filename,
-      mimetype,
-      size,
-      title,
-      content,
-      width,
-      status,
-      userId
-    );
     try {
       const statement = `INSERT INTO photo (filename, mimetype, size, title, content,width,status,user_id) VALUES (?, ?, ?, ?, ?, ?, ?,?)`;
       const [result] = await connection.execute(statement, [
@@ -132,7 +121,6 @@ class fileService {
 
   async getFileByFilename(filename) {
     try {
-      // console.log('filename',filename )
       const statement = `SELECT * FROM file WHERE filename = ?;`;
       const [result] = await connection.execute(statement, [filename]);
       return result[0];

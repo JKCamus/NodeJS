@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-07 23:21:10
  * @LastEditors: camus
- * @LastEditTime: 2021-02-07 17:38:15
+ * @LastEditTime: 2021-02-08 09:47:17
  */
 const Router = require("koa-router");
 const photoRouter = new Router({ prefix: "/photo" });
@@ -38,7 +38,6 @@ photoRouter.patch(
 photoRouter.delete(
   "/clearPhotos",
   verifyAuth,
-  verifyPermission,
   clearPhotos
 );
 
