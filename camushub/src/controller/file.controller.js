@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-03 20:26:23
  * @LastEditors: camus
- * @LastEditTime: 2021-02-08 09:35:59
+ * @LastEditTime: 2021-02-08 09:50:37
  */
 const { APP_HOST, APP_PORT } = require("../app/config");
 const fileService = require("../service/file.service");
@@ -14,7 +14,6 @@ const errorTypes = require("../constants/error-types");
 class FileController {
   async saveAvatarInfo(ctx, next) {
     try {
-      //
       const { filename, mimetype, size } = ctx.req.file;
       const { id } = ctx.user;
       const result = await fileService.createAvatar(
