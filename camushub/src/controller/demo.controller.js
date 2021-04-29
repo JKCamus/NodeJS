@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2021-01-11 13:36:25
  * @LastEditors: camus
- * @LastEditTime: 2021-02-08 09:12:31
+ * @LastEditTime: 2021-04-29 19:43:34
  */
 const fs = require("fs");
 const DemoService = require("../service/demo.service");
@@ -89,6 +89,7 @@ class DemoController {
           htmlUrl: item.htmlName ? item.htmlUrl : "",
         };
       });
+      ctx.set("Cache-Control", "public,max-age=120");
       ctx.body = await result;
     } catch (error) {
       console.log("DemoService.getDemoList", error);

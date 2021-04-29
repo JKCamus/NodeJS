@@ -4,7 +4,7 @@
  * @Author: camus
  * @Date: 2020-12-07 23:22:17
  * @LastEditors: camus
- * @LastEditTime: 2021-01-09 21:49:54
+ * @LastEditTime: 2021-04-29 19:48:11
  */
 const fs = require("fs");
 const fileService = require("../service/file.service");
@@ -17,6 +17,7 @@ class PhotoController {
       const { size, page } = ctx.query;
       if (!size || !page) throw new Error();
       const result = await fileService.getPhotoList(page, size);
+      ctx.set("Cache-Control", "public,max-age=120");
       ctx.body = result;
     } catch (error) {
       console.log("PhotoController.create", error);
@@ -34,6 +35,7 @@ class PhotoController {
         filename = filename + "-" + type;
       }
       ctx.response.set("content-type", fileInfo.mimetype);
+      ctx.set("Cache-Control", "public,max-age=60");
       ctx.body = fs.createReadStream(`${PHOTO_PATH}/${filename}`);
     } catch (error) {
       console.log("PhotoController.fileInfo", error);
